@@ -17,17 +17,20 @@ public class JpaMain {
         tx.begin();
 
         try {
-            List<Student> students = em.createQuery("select s from Student as s", Student.class).getResultList();
-            for(Student s:students) {
-                System.out.println("m.getName() = " + s.getName());
-            }
+//            비영속 상태
+            Student student = new Student(200L, 20, "member200");
+//            영속 상태
+            em.persist(student);
+            em.flush();
+
+            System.out.println("=====================");
             tx.commit();
         } catch(Exception e) {
             tx.rollback();
         } finally {
             em.close();
         }
-        
+
         em.close();
         emf.close();
     }
