@@ -18,12 +18,12 @@ public class JpaMain {
 
         try {
 //            비영속 상태
-            Student student = new Student(200L, 20, "member200");
-//            영속 상태
-            em.persist(student);
-            em.flush();
+            Student student = em.find(Student.class, 200L);
+            student.setName("AAAAA");
 
-            System.out.println("=====================");
+//            em.detach(student); 특정 엔티티만 준영속화
+            em.clear(); // 영속성 컨텍스트 초기화
+
             tx.commit();
         } catch(Exception e) {
             tx.rollback();
