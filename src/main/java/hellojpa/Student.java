@@ -1,25 +1,25 @@
 package hellojpa;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import lombok.Data;
+import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Student {
 
-    @Id
+    @Id @GeneratedValue
     private Long id;
-    private int age;
+
     private String name;
 
-    public Student() { }
-    public Student(Long id, int age, String name) {
-        this.id = id;
-        this.age = age;
-        this.name = name;
+    private int age;
+
+    @ManyToOne
+    @JoinColumn(name = "CLUB_ID")
+    private Club club;
+
+    public void changeClub(Club club) {
+        this.club = club;
+        club.getStudents().add(this);
     }
 }
