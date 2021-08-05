@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.lang.reflect.Member;
 import java.util.List;
 
 public class JpaMain {
@@ -17,13 +16,32 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            비영속 상태
-            Student student = em.find(Student.class, 200L);
-            student.setName("AAAAA");
 
-//            em.detach(student); 특정 엔티티만 준영속화
-            em.clear(); // 영속성 컨텍스트 초기화
+            Club club = new Club();
+            club.setName("프로그래밍부");
+//            club.setDescription("재밌게 같이 코딩해봐요~~~");
+            em.persist(club);
 
+            Student codeMania = new Student();
+            codeMania.setName("code-mania");
+            codeMania.setAge(21);
+            codeMania.setClub(club);
+            em.persist(codeMania);
+
+            Student codeLover = new Student();
+            codeLover.setName("code-lover");
+            codeLover.setAge(21);
+            codeLover.setClub(club);
+            em.persist(codeLover);
+
+            codeLover.setName("codeLover");
+            em.flush();
+            em.clear();
+
+            System.out.println("After");
+            Club findClub = em.find(Club.class, club.getId());
+            List<Student> students = findClub.getStudents();
+            for(Student s:students) System.out.println(club.getName() + ": " + s.getName());
             tx.commit();
         } catch(Exception e) {
             tx.rollback();
