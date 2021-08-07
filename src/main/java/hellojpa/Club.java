@@ -16,6 +16,7 @@ public class Club {
 
     private String name;
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany
+    @JoinColumn(name = "CLUB_ID")
     private List<Student> students = new ArrayList<>();
 }

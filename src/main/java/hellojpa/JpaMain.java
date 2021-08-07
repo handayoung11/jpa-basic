@@ -16,34 +16,26 @@ public class JpaMain {
         tx.begin();
 
         try {
-
-            Club club = new Club();
-            club.setName("프로그래밍부");
-//            club.setDescription("재밌게 같이 코딩해봐요~~~");
-            em.persist(club);
-
             Student codeMania = new Student();
             codeMania.setName("code-mania");
             codeMania.setAge(21);
-            codeMania.setClub(club);
+//            codeMania.setClub(club);
             em.persist(codeMania);
 
             Student codeLover = new Student();
             codeLover.setName("code-lover");
             codeLover.setAge(21);
-            codeLover.setClub(club);
+//            codeLover.setClub(club);
             em.persist(codeLover);
 
-            codeLover.setName("codeLover");
-            em.flush();
-            em.clear();
-
-            System.out.println("After");
-            Club findClub = em.find(Club.class, club.getId());
-            List<Student> students = findClub.getStudents();
-            for(Student s:students) System.out.println(club.getName() + ": " + s.getName());
+            Club club = new Club();
+            club.setName("프로그래밍부");
+            club.getStudents().add(codeMania);
+            club.getStudents().add(codeLover);
+            em.persist(club);
             tx.commit();
         } catch(Exception e) {
+            e.printStackTrace();
             tx.rollback();
         } finally {
             em.close();

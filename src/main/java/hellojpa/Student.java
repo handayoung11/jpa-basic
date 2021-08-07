@@ -15,11 +15,6 @@ public class Student {
     private int age;
 
     @ManyToOne
-    @JoinColumn(name = "CLUB_ID")
+    @JoinColumn(name = "CLUB_ID", insertable = false, updatable = false)
     private Club club;
-
-    public void changeClub(Club club) {
-        this.club = club;
-        club.getStudents().add(this);
-    }
 }
