@@ -17,4 +17,8 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "CLUB_ID", insertable = false, updatable = false)
     private Club club;
+
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    Locker locker;
 }
