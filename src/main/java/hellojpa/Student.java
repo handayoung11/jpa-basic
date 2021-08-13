@@ -2,6 +2,8 @@ package hellojpa;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,4 +23,10 @@ public class Student {
     @OneToOne
     @JoinColumn(name = "LOCKER_ID")
     Locker locker;
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentSubject> studentSubjects = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "StudentSubject")
+//    private List<Subject> subjects = new ArrayList<>();
 }
