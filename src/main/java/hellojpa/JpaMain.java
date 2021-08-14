@@ -54,9 +54,9 @@ public class JpaMain {
             em.persist(studentSubject3);
 
             tx.commit();
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }

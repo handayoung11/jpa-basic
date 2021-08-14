@@ -16,6 +16,8 @@ public class Club {
 
     private String name;
 
+    private String description;
+
     @OneToMany
     @JoinColumn(name = "CLUB_ID")
     private List<Student> students = new ArrayList<>();
