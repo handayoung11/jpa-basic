@@ -56,6 +56,7 @@ public class JpaMain {
             em.persist(studentSubject3);
 
             tx.commit();
+            System.out.println("codeMania's subject count = " + codeMania.getStudentSubjects().size());
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
