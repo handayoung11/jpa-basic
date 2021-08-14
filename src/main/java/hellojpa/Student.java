@@ -26,7 +26,9 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private List<StudentSubject> studentSubjects = new ArrayList<>();
-//    @ManyToMany
-//    @JoinTable(name = "StudentSubject")
-//    private List<Subject> subjects = new ArrayList<>();
+
+    void addStudentSubject(StudentSubject studentSubject) {
+        studentSubject.setStudent(this);
+        studentSubjects.add(studentSubject);
+    }
 }

@@ -39,24 +39,25 @@ public class JpaMain {
 
             // codeMania 학생 수학 과목 수강
             StudentSubject studentSubject = new StudentSubject();
-            studentSubject.setStudent(codeMania);
-            studentSubject.setSubject(math);
+            codeMania.addStudentSubject(studentSubject);
+            studentSubject.takeSubject(math);
             em.persist(studentSubject);
 
             // codeMania 학생 한국사 과목 수강
             StudentSubject studentSubject2 = new StudentSubject();
-            studentSubject2.setStudent(codeMania);
-            studentSubject2.setSubject(history);
+            codeMania.addStudentSubject(new StudentSubject());
+            studentSubject2.takeSubject(history);
             em.persist(studentSubject2);
 
             // codeLover 학생 한국사 과목 수강
             StudentSubject studentSubject3 = new StudentSubject();
             studentSubject3.setStudent(codeLover);
-            studentSubject3.setSubject(history);
+            studentSubject3.takeSubject(history);
             em.persist(studentSubject3);
 
             tx.commit();
-            System.out.println("codeMania's subject count = " + codeMania.getStudentSubjects().size());
+            System.out.println("codeMania가 수강 중인 과목 수 = " + codeMania.getStudentSubjects().size());
+            System.out.println("수학을 수강 중인 학생 수 = " + math.getStudentSubjects().size());
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
