@@ -16,27 +16,28 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Club club = new Club();
+            club.setName("프로그래밍부");
+            club.setDescription("재밌게 같이 코딩해봐요~~~");
+            em.persist(club);
+
             Student codeMania = new Student();
             codeMania.setName("code-mania");
             codeMania.setAge(21);
-//            codeMania.setClub(club);
+            codeMania.setClub(club);
             em.persist(codeMania);
 
-            Student codeLover = new Student();
-            codeLover.setName("code-lover");
-            codeLover.setAge(21);
-//            codeLover.setClub(club);
-            em.persist(codeLover);
+            em.flush();
+            em.clear();
 
-            Club club = new Club();
-            club.setName("프로그래밍부");
-            club.getStudents().add(codeMania);
-            club.getStudents().add(codeLover);
-            em.persist(club);
+            Student firstStudent = em.find(Student.class, codeMania.getId());
+            System.out.println("first student = " + firstStudent.getName());
+            System.out.println("club of first student = " + firstStudent.getClub().getName());
+
             tx.commit();
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
