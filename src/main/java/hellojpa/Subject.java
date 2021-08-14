@@ -14,10 +14,7 @@ public class Subject {
 
     private String name;
 
-    @OneToMany(mappedBy = "subject")
-    private List<StudentSubject> studentSubjects = new ArrayList<>();
-
-//    @ManyToMany(mappedBy = "subjects")
-//    private List<Student> students = new ArrayList<>();
+    @ManyToMany(mappedBy = "subjects")
+    private List<Student> students = new ArrayList<>();
 }
 
