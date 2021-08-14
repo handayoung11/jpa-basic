@@ -4,8 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -17,42 +15,30 @@ public class JpaMain {
         tx.begin();
 
         try {
+            // 수학 과목 등록
             Subject math = new Subject();
             math.setName("수학");
             em.persist(math);
 
+            // 한국사 과목 등록
             Subject history = new Subject();
             history.setName("한국사");
             em.persist(history);
 
+            // code-mania 학생 등록
             Student codeMania = new Student();
             codeMania.setName("code-mania");
             codeMania.setAge(21);
-//            codeMania.getSubjects().add(math);
-//            codeMania.getSubjects().add(history);
+            codeMania.getSubjects().add(math); // 수학 과목 수강
+            codeMania.getSubjects().add(history); // 역사 과목 수강
             em.persist(codeMania);
 
+            // code-lover 학생 등록
             Student codeLover = new Student();
             codeLover.setName("code-lover");
             codeLover.setAge(21);
-//            codeLover.getSubjects().add(history);
+            codeLover.getSubjects().add(history); // 역사 과목 수강
             em.persist(codeLover);
-
-            StudentSubject studentSubject = new StudentSubject();
-            studentSubject.setStudent(codeMania);
-            studentSubject.setSubject(math);
-            em.persist(studentSubject);
-
-            StudentSubject studentSubject2 = new StudentSubject();
-            studentSubject2.setStudent(codeMania);
-            studentSubject2.setSubject(history);
-            em.persist(studentSubject2);
-
-            StudentSubject studentSubject3 = new StudentSubject();
-            studentSubject3.setStudent(codeLover);
-            studentSubject3.setSubject(history);
-            em.persist(studentSubject3);
-
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
