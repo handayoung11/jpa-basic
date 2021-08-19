@@ -15,29 +15,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Kitchenware kitchenware = new Kitchenware();
-            kitchenware.setName("냄비");
-            kitchenware.setPrice(20000);
-            kitchenware.setManufacturer("code-mania");
-            kitchenware.setPurpose("무수분, 저수분 웰빙요리에 적합한 스테인리스 냄비");
-            em.persist(kitchenware);
+            // programming club 생성
+            Club club = new Club();
+            club.setName("programming");
+            club.setDescription("즐거운 프로그래밍?");
+            club.setCreator("code-mania");
+            em.persist(club);
 
-            em.flush();
-            em.clear();
-
-            Appliance appliance = em.find(Appliance.class, kitchenware.getId());
-            System.out.println("appliance = " + appliance);
-
-            if(appliance instanceof Kitchenware) {
-                Kitchenware findKitchenware = (Kitchenware) appliance;
-                System.out.println("kitchenware.getPurpose() = " + findKitchenware.getPurpose());
-            } else if(appliance instanceof AcousticEquipment) {
-                AcousticEquipment acousticEquipment = (AcousticEquipment) appliance;
-                System.out.println("acousticEquipment.isWireless() = " + acousticEquipment.isWireless());
-            } else if(appliance instanceof Thermostat) {
-                Thermostat thermostat = (Thermostat) appliance;
-                System.out.println("thermostat.isCooling() = " + thermostat.isCooling());
-            }
+            // code-mania student 생성
+            Student student = new Student();
+            student.setName("code-mania");
+            student.setClub(club);
+            student.setCreator("code-mania");
+            em.persist(student);
 
             tx.commit();
         } catch (Exception e) {

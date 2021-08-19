@@ -1,13 +1,14 @@
 package hellojpa;
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-public class Student {
+public class Student extends BaseEntity {
 
     @Id @GeneratedValue
     private Long id;

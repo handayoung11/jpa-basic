@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Club {
+public class Club extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "CLUB_ID")
@@ -21,4 +21,5 @@ public class Club {
     @OneToMany
     @JoinColumn(name = "CLUB_ID")
     private List<Student> students = new ArrayList<>();
+
 }
