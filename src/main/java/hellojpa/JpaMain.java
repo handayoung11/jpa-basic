@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class JpaMain {
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -16,45 +15,25 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // programming club 생성
-            Club club = new Club();
-            club.setName("programming");
-            club.setDescription("즐거운 프로그래밍?");
-            club.setCreator("code-mania");
-            em.persist(club);
+            // child1, 2 생성
+            Child child1 = new Child();
+            child1.setName("child1");
 
-            // code-mania student 생성
-            Student student = new Student();
-            student.setName("code-mania");
-            student.setClub(club);
-            student.setCreator("code-mania");
-            em.persist(student);
+            Child child2 = new Child();
+            child2.setName("child2");
 
-            // programming club 생성
-            Club club2 = new Club();
-            club2.setName("programming");
-            club2.setDescription("즐거운 프로그래밍?");
-            club2.setCreator("code-mania");
-            em.persist(club2);
+            // parent1 생성
+            Parent parent1 = new Parent();
+            parent1.setName("parent1");
+            parent1.getChildren().add(child1);
+            parent1.getChildren().add(child2);
 
-            // code-mania student 생성
-            Student student2 = new Student();
-            student2.setName("code-mania");
-            student2.setClub(club2);
-            student2.setCreator("code-mania");
-            em.persist(student2);
+            child1.setParent(parent1);
+            child2.setParent(parent1);
+            em.persist(parent1);
+//            em.remove(parent1);
 
-            clearEm();
-
-            Student findStudent = em.find(Student.class, student.getId());
-            // 실행결과: findStudent = class Club의 proxy class
-            System.out.println("findStudent = " + findStudent.getClub().getClass());
-            System.out.println("club.name = " + findStudent.getClub().getName());
-
-            clearEm();
-
-            // JPQL과 N+1 알아보기
-            List<Student> students = em.createQuery("select s from Student s").getResultList();
+            parent1.getChildren().remove(child1);
 
             tx.commit();
         } catch (Exception e) {
