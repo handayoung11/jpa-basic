@@ -1,12 +1,10 @@
 package hellojpa;
 
-import org.hibernate.Hibernate;
-import org.hibernate.LazyInitializationException;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -32,26 +30,31 @@ public class JpaMain {
             student.setCreator("code-mania");
             em.persist(student);
 
-            clearEm();
+            // programming club 생성
+            Club club2 = new Club();
+            club2.setName("programming");
+            club2.setDescription("즐거운 프로그래밍?");
+            club2.setCreator("code-mania");
+            em.persist(club2);
 
-            // 타입 체크 코드
-            Student refStudent = em.getReference(Student.class, student.getId());
-            isStudent(refStudent);
-
-            clearEm();
-
-            // 동일성 보장 테스트 코드
-            checkIdentity(student);
-
-            clearEm();
-
-            // 프록시 관리
-            proxyUtill(em, student);
+            // code-mania student 생성
+            Student student2 = new Student();
+            student2.setName("code-mania");
+            student2.setClub(club2);
+            student2.setCreator("code-mania");
+            em.persist(student2);
 
             clearEm();
 
-            // 에러 체크 코드
-            errorCheck(student);
+            Student findStudent = em.find(Student.class, student.getId());
+            // 실행결과: findStudent = class Club의 proxy class
+            System.out.println("findStudent = " + findStudent.getClub().getClass());
+            System.out.println("club.name = " + findStudent.getClub().getName());
+
+            clearEm();
+
+            // JPQL과 N+1 알아보기
+            List<Student> students = em.createQuery("select s from Student s").getResultList();
 
             tx.commit();
         } catch (Exception e) {
@@ -68,56 +71,5 @@ public class JpaMain {
     public static void clearEm() {
         em.flush();
         em.clear();
-    }
-
-    public static void checkIdentity(Student student) {
-        Student refStudent = em.getReference(Student.class, student.getId());
-        Student findStudent = em.find(Student.class, student.getId());
-
-        System.out.println("refStudent = " + refStudent.getClass());
-        System.out.println("findStudent = " + findStudent.getClass());
-        System.out.println("(refStudent == findStudent) = " + (refStudent == findStudent));
-
-        clearEm();
-
-        Student findStudent2 = em.find(Student.class, student.getId());
-        Student refStudent2 = em.getReference(Student.class, student.getId());
-
-        System.out.println("refStudent2 = " + refStudent2.getClass());
-        System.out.println("findStudent2 = " + findStudent2.getClass());
-        System.out.println("(refStudent2 == findStudent2) = " + (refStudent2 == findStudent2));
-    }
-
-    public static boolean isStudent(Object student) {
-        // ==으로 타입 체크
-        System.out.println("student = " + (student.getClass() == Student.class));
-        // instanceof로 타입체크
-        System.out.println("student instanceof Student = " + (student instanceof Student));
-        return student instanceof Student;
-    }
-
-    public static void errorCheck(Student student) {
-        try {
-            Student refStudent = em.getReference(Student.class, student.getId());
-            // refStudent 준영속화
-            em.detach(refStudent);
-            // refStudent 초기화
-            refStudent.getName();
-        } catch (LazyInitializationException e) {
-            System.out.println("0. error====================================");
-            e.printStackTrace();
-        }
-    }
-
-    public static void proxyUtill(EntityManager em, Student student) {
-        System.out.println("1. proxy utill====================================");
-        Student refStudent = em.getReference(Student.class, student.getId());
-        // proxy class 이름 확인
-        System.out.println("refStudent.getClass().getName() = " + refStudent.getClass().getName());
-        // proxy class 초기화 여부 확인
-        System.out.println("emf.getPersistenceUnitUtil().isLoaded(refStudent) = " + emf.getPersistenceUnitUtil().isLoaded(refStudent));
-        // proxy class 초기화
-        Hibernate.initialize(refStudent);
-        System.out.println("emf.getPersistenceUnitUtil().isLoaded(refStudent) = " + emf.getPersistenceUnitUtil().isLoaded(refStudent));
     }
 }

@@ -18,8 +18,7 @@ public class Club extends BaseEntity {
 
     private String description;
 
-    @OneToMany
-    @JoinColumn(name = "CLUB_ID")
+    @OneToMany(mappedBy = "club")
     private List<Student> students = new ArrayList<>();
 
 }
