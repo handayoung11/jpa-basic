@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Student extends BaseEntity {
+public class Student {
 
     @Id @GeneratedValue
     private Long id;
@@ -15,10 +15,24 @@ public class Student extends BaseEntity {
 
     private int age;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+//    @ManyToOne(fetch = FetchType.EAGER)
 //    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CLUB_ID")
-    private Club club;
+//    @JoinColumn(name = "CLUB_ID")
+//    private Club club;
+
+//    @Embedded
+//    private Period period;
+
+    @Embedded
+    private Address address;
+
+//    @Embedded
+//    @AttributeOverrides({
+//            @AttributeOverride(name="city", column = @Column(name = "workcity")),
+//            @AttributeOverride(name="street", column = @Column(name = "workstreet")),
+//            @AttributeOverride(name="zipcode", column = @Column(name = "workzipcode")),
+//    })
+//    private Address realAddress;
 
 //    @OneToOne
 //    @JoinColumn(name = "LOCKER_ID")

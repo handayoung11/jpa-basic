@@ -2,9 +2,10 @@ package hellojpa;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ public class Club extends BaseEntity {
 
     private String description;
 
-    @OneToMany(mappedBy = "club")
-    private List<Student> students = new ArrayList<>();
+//    @OneToMany(mappedBy = "club")
+//    private List<Student> students = new ArrayList<>();
 
 }

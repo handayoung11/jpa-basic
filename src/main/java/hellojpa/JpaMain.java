@@ -15,26 +15,24 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // child1, 2 생성
-            Child child1 = new Child();
-            child1.setName("child1");
+            Address address = new Address("city", "street", "100");
 
-            Child child2 = new Child();
-            child2.setName("child2");
+            Student codeMania = new Student();
+            codeMania.setName("code-mania");
+            codeMania.setAddress(address);
+            em.persist(codeMania);
 
-            // parent1 생성
-            Parent parent1 = new Parent();
-            parent1.setName("parent1");
-            parent1.getChildren().add(child1);
-            parent1.getChildren().add(child2);
+//            Address address2 = new Address(address.getCity(), address.getStreet(), address.getZipcode());
+            Student codeLover = new Student();
+            codeLover.setName("code-lover");
+            codeLover.setAddress(address);
+            em.persist(codeLover);
 
-            child1.setParent(parent1);
-            child2.setParent(parent1);
-            em.persist(parent1);
-//            em.remove(parent1);
+//            codeMania.getAddress().setCity("newCity");
+            codeMania.setAddress(new Address("newCity", address.getStreet(), address.getZipcode()));
 
-            parent1.getChildren().remove(child1);
-
+            System.out.println("codeLover.getAddress() = " + codeLover.getAddress());
+            System.out.println("codeLover.getAddress() = " + (codeLover.getAddress() == codeMania.getAddress()));
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
