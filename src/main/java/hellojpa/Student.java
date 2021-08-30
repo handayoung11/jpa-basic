@@ -20,19 +20,19 @@ public class Student {
 //    @JoinColumn(name = "CLUB_ID")
 //    private Club club;
 
-//    @Embedded
-//    private Period period;
+    @Embedded
+    private Period period;
 
     @Embedded
     private Address address;
 
-//    @Embedded
-//    @AttributeOverrides({
-//            @AttributeOverride(name="city", column = @Column(name = "workcity")),
-//            @AttributeOverride(name="street", column = @Column(name = "workstreet")),
-//            @AttributeOverride(name="zipcode", column = @Column(name = "workzipcode")),
-//    })
-//    private Address realAddress;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "SCHOLLCITY")),
+            @AttributeOverride(name = "street", column = @Column(name = "SCHOOLSTREET")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "SCHOOLZIPCODE"))
+    })
+    private Address schollAddress;
 
 //    @OneToOne
 //    @JoinColumn(name = "LOCKER_ID")
