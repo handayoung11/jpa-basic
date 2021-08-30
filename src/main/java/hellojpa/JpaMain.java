@@ -1,52 +1,21 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 
 public class JpaMain {
-    static EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-    static EntityManager em = emf.createEntityManager();
 
     public static void main(String[] args) {
-        EntityTransaction tx = em.getTransaction();
+        LocalDateTime admissionDate = LocalDateTime.now();
 
-        tx.begin();
+        Period period1 = new Period();
+        period1.setAdmissionDate(admissionDate);
+        period1.setGraduationDate(null);
 
-        try {
-            Address address = new Address("city", "street", "100");
+        Period period2 = new Period();
+        period2.setAdmissionDate(admissionDate);
+        period2.setGraduationDate(null);
 
-            Student codeMania = new Student();
-            codeMania.setName("code-mania");
-            codeMania.setAddress(address);
-            em.persist(codeMania);
-
-//            Address address2 = new Address(address.getCity(), address.getStreet(), address.getZipcode());
-            Student codeLover = new Student();
-            codeLover.setName("code-lover");
-            codeLover.setAddress(address);
-            em.persist(codeLover);
-
-//            codeMania.getAddress().setCity("newCity");
-            codeMania.setAddress(new Address("newCity", address.getStreet(), address.getZipcode()));
-
-            System.out.println("codeLover.getAddress() = " + codeLover.getAddress());
-            System.out.println("codeLover.getAddress() = " + (codeLover.getAddress() == codeMania.getAddress()));
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-
-        em.close();
-        emf.close();
-    }
-
-    public static void clearEm() {
-        em.flush();
-        em.clear();
+        System.out.println("(period1 == period2) = " + (period1 == period2));
+        System.out.println("(period1.equals(period2)) = " + (period1.equals(period2)));
     }
 }
