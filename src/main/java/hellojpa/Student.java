@@ -3,46 +3,31 @@ package hellojpa;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
 public class Student {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String name;
 
     private int age;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "CLUB_ID")
-//    private Club club;
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_SUBJECT"
+            , joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "SUBJECT_NAME")
+    private Set<String> favoriteSubjects = new HashSet<>();
 
-    @Embedded
-    private Period period;
-
-    @Embedded
-    private Address address;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(name = "SCHOLLCITY")),
-            @AttributeOverride(name = "street", column = @Column(name = "SCHOOLSTREET")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "SCHOOLZIPCODE"))
-    })
-    private Address schollAddress;
-
-//    @OneToOne
-//    @JoinColumn(name = "LOCKER_ID")
-//    Locker locker;
-//
-//    @OneToMany(mappedBy = "student")
-//    private List<StudentSubject> studentSubjects = new ArrayList<>();
-//
-//    void addStudentSubject(StudentSubject studentSubject) {
-//        studentSubject.setStudent(this);
-//        studentSubjects.add(studentSubject);
-//    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "ADDRESS"
+            , joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    private List<Address> addressHistory = new ArrayList<>();
 }
