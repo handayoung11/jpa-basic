@@ -26,8 +26,7 @@ public class Student {
     @Column(name = "SUBJECT_NAME")
     private Set<String> favoriteSubjects = new HashSet<>();
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "ADDRESS"
-            , joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    private List<Address> addressHistory = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JoinColumn(name = "STUDENT_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
 }

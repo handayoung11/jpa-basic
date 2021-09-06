@@ -17,7 +17,7 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 값 타입 컬렉션 저장 코드
+            // 저장 코드
             Student student = new Student();
             student.setName("code-mania");
 
@@ -25,20 +25,20 @@ public class JpaMain {
             student.getFavoriteSubjects().add("영어");
             student.getFavoriteSubjects().add("역사");
 
-            student.getAddressHistory().add(new Address("서울특별시", "세종대로", "10000"));
-            student.getAddressHistory().add(new Address("인천광역시", "부평대로", "60000"));
+            student.getAddressHistory().add(new AddressEntity("서울특별시", "세종대로", "10000"));
+            student.getAddressHistory().add(new AddressEntity("인천광역시", "부평대로", "60000"));
 
             em.persist(student);
 
             em.flush();
             em.clear();
 
-            // 값 타입 컬렉션 조회 코드
+            // 조회 코드
             System.out.println("============================");
             Student findStudent = em.find(Student.class, student.getId());
-            List<Address> addressHistory = findStudent.getAddressHistory();
-            for (Address address : addressHistory) {
-                System.out.println("address.getCity() = " + address.getCity());
+            List<AddressEntity> addressHistory = findStudent.getAddressHistory();
+            for (AddressEntity address : addressHistory) {
+                System.out.println("address.getCity() = " + address.getAddress().getCity());
             }
 
             Set<String> favoriteSubjects = findStudent.getFavoriteSubjects();
@@ -47,13 +47,12 @@ public class JpaMain {
             }
             System.out.println("============================");
 
-            //값 타입 컬렉션 수정 코드
+            // 수정 코드
             favoriteSubjects.remove("역사");
             favoriteSubjects.add("과학");
 
             Address address = new Address("서울특별시", "세종대로", "10000");
-            findStudent.getAddressHistory().remove(address);
-            findStudent.getAddressHistory().add(new Address(address.getCity(), address.getStreet(), "65202"));
+            findStudent.getAddressHistory().get(0).setAddress(new Address(address.getCity(), address.getStreet(), "65202"));
 
             tx.commit();
         } catch (Exception e) {
