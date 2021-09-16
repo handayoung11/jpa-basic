@@ -1,32 +1,33 @@
 package hellojpa;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
 public class Student {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     private String name;
 
     private int age;
 
-    @ElementCollection
-    @CollectionTable(name = "FAVORITE_SUBJECT"
-            , joinColumns = @JoinColumn(name = "MEMBER_ID"))
-    @Column(name = "SUBJECT_NAME")
-    private Set<String> favoriteSubjects = new HashSet<>();
+    @Embedded
+    private Address address;
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JoinColumn(name = "STUDENT_ID")
-    private List<AddressEntity> addressHistory = new ArrayList<>();
+    @Setter(AccessLevel.PROTECTED)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CLUB_ID")
+    Club club;
+
+    void changeClub(Club club) {
+        this.setClub(club);
+        club.getStudents().add(this);
+    }
 }
