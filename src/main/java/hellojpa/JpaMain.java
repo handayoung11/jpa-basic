@@ -4,9 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class JpaMain {
@@ -14,27 +11,30 @@ public class JpaMain {
     static EntityManager em = emf.createEntityManager();
 
     public static void main(String[] args) {
-        EntityTransaction tx = em.getTransaction();
 
+        EntityTransaction tx = em.getTransaction();
         tx.begin();
 
         try {
-            List<Student> resultList = em.createQuery("select s from Student s where s.name like '%김%'", Student.class)
-                    .getResultList();
+            Club club = new Club();
+            club.setName("programming");
+            em.persist(club);
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Student> query = cb.createQuery(Student.class);
-            Root<Student> s = query.from(Student.class);
+            Student student = new Student();
+            student.changeClub(club);
+            student.setName("code-mania");
+            student.setAge(21);
+            em.persist(student);
 
-            CriteriaQuery<Student> cq = query.select(s);
+            em.flush();
+            em.clear();
 
-            //동적쿼리
-            String name = "kim";
-            if(name != null) cq.where(cb.like(s.get("name"), name));
-
-            List<Student> students = em.createQuery(cq).getResultList();
-
-            List students2 = em.createNativeQuery("select * from student", Student.class).getResultList();
+//            String query = "select s from Student s inner join s.club c"; //inner join
+//            String query = "select s from Student s left join s.club c"; //outer join
+//            String query = "select s, c from Student s, Club c where s.name = c.name"; // cross join
+            String query = "select s, c from Student s left join Club c on c.name='programming'"; // on으로 조건 걸기
+            List<Object[]> students = em.createQuery(query).getResultList();
+            System.out.println("members.size() = " + students.size());
 
             tx.commit();
         } catch (Exception e) {
