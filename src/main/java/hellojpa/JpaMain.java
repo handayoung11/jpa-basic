@@ -16,12 +16,8 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Club club = new Club();
-            club.setName("programming");
-            em.persist(club);
-
             Student student = new Student();
-            student.changeClub(club);
+            student.setSchool(SchoolType.HIGH);
             student.setName("code-mania");
             student.setAge(21);
             em.persist(student);
@@ -29,12 +25,14 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-//            String query = "select s from Student s inner join s.club c"; //inner join
-//            String query = "select s from Student s left join s.club c"; //outer join
-//            String query = "select s, c from Student s, Club c where s.name = c.name"; // cross join
-            String query = "select s, c from Student s left join Club c on c.name='programming'"; // on으로 조건 걸기
-            List<Object[]> students = em.createQuery(query).getResultList();
-            System.out.println("members.size() = " + students.size());
+            // JPQL 표준함수
+//            String query = "select concat('이름: ', s.name) from Student s";
+            // DB 종속함수
+//            String query = "select avg(s.age) from Student s";
+            // 사용자정의함수
+            String query = "select average(s.age) from Student s";
+            List<Double> students = em.createQuery(query, Double.class).getResultList();
+            System.out.println("avg of ages = " + students.get(0));
 
             tx.commit();
         } catch (Exception e) {
