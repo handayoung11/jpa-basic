@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -18,13 +20,13 @@ public class Student {
 
     private int age;
 
-    @Embedded
-    private Address address;
-
     @Setter(AccessLevel.PROTECTED)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLUB_ID")
     Club club;
+
+    @OneToMany(mappedBy = "student")
+    List<SubjectOfStudent> mySubjects = new ArrayList<>();
 
     void changeClub(Club club) {
         this.setClub(club);

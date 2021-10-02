@@ -17,7 +17,6 @@ public class JpaMain {
 
         try {
             Student student = new Student();
-            student.setSchool(SchoolType.HIGH);
             student.setName("code-mania");
             student.setAge(21);
             em.persist(student);
@@ -25,14 +24,8 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            // JPQL 표준함수
-//            String query = "select concat('이름: ', s.name) from Student s";
-            // DB 종속함수
-//            String query = "select avg(s.age) from Student s";
-            // 사용자정의함수
-            String query = "select average(s.age) from Student s";
-            List<Double> students = em.createQuery(query, Double.class).getResultList();
-            System.out.println("avg of ages = " + students.get(0));
+            String query = "select s.mySubjects from  Student s";
+            List<Object[]> students = em.createQuery(query, Object[].class).getResultList();
 
             tx.commit();
         } catch (Exception e) {
