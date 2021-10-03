@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -24,9 +22,6 @@ public class Student {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLUB_ID")
     Club club;
-
-    @OneToMany(mappedBy = "student")
-    List<SubjectOfStudent> mySubjects = new ArrayList<>();
 
     void changeClub(Club club) {
         this.setClub(club);
