@@ -39,31 +39,48 @@ public class JpaMain {
             Student student3 = new Student();
             student3.setName("code-mania3");
             student3.setAge(21);
-            student3.changeClub(c2);
+            student3.changeClub(c1);
             em.persist(student3);
+
+            Room r1 = new Room();
+            r1.setClub(c1);
+            r1.setLocation("1F");
+            r1.setName("도서관");
+            em.persist(r1);
+
+            Room r2 = new Room();
+            r2.setClub(c1);
+            r2.setLocation("2F");
+            r2.setName("컴퓨터실");
+            em.persist(r2);
+
 
             em.flush();
             em.clear();
 
-            //페치조인
-//            String query = "select s from Student s join fetch s.club c";
-//            List<Student> students = em.createQuery(query, Student.class).getResultList();
-//
-//            for (Student s : students) {
-//                System.out.println("name = " + s.getName());
-//                System.out.println("club = " + s.getClub().getName());
-//                System.out.println("================================");
-//            }
-
-            //컬렉션페치조인
-            String query = "select distinct c from Club c join fetch c.students s";
-            List<Club> clubs = em.createQuery(query, Club.class).getResultList();
+//            String query = "select distinct c from Club c join fetch c.students s where s.id <= 3";
+//            String query = "select c from Club c join fetch c.students s join fetch c.rooms";
+            //페이징
+//            String query = "select c from Club c join fetch c.students";
+            //@BatchSize를 통한 페이징
+            String query = "select c from Club c";
+            List<Club> clubs = em.createQuery(query, Club.class)
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getResultList();
 
             for (Club c : clubs) {
                 System.out.println("name = " + c.getName());
                 System.out.println("student size = " + c.getStudents().size());
                 System.out.println("================================");
             }
+
+            //방향 전환 페이징 쿼리
+//            String studentQuery = "select s from Student s join fetch s.club";
+//            List<Student> students = em.createQuery(studentQuery)
+//                        .setFirstResult(0)
+//                        .setMaxResults(1)
+//                        .getResultList();
 
             tx.commit();
         } catch (Exception e) {
