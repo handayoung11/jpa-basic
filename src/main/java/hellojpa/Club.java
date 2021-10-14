@@ -1,6 +1,7 @@
 package hellojpa;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -17,8 +18,10 @@ public class Club {
 
     @OneToMany(mappedBy = "club")
     @BatchSize(size = 100)
+    @ToString.Exclude
     private List<Student> students = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
+    @ToString.Exclude
     private List<Room> rooms = new ArrayList<>();
 }

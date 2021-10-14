@@ -58,29 +58,11 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-//            String query = "select distinct c from Club c join fetch c.students s where s.id <= 3";
-//            String query = "select c from Club c join fetch c.students s join fetch c.rooms";
-            //페이징
-//            String query = "select c from Club c join fetch c.students";
-            //@BatchSize를 통한 페이징
-            String query = "select c from Club c";
-            List<Club> clubs = em.createQuery(query, Club.class)
-                    .setFirstResult(0)
-                    .setMaxResults(1)
+            String query = "select s from Student s where s.club = :club";
+            List<Student> students = em.createQuery(query, Student.class)
+                    .setParameter("club", c1)
                     .getResultList();
-
-            for (Club c : clubs) {
-                System.out.println("name = " + c.getName());
-                System.out.println("student size = " + c.getStudents().size());
-                System.out.println("================================");
-            }
-
-            //방향 전환 페이징 쿼리
-//            String studentQuery = "select s from Student s join fetch s.club";
-//            List<Student> students = em.createQuery(studentQuery)
-//                        .setFirstResult(0)
-//                        .setMaxResults(1)
-//                        .getResultList();
+            for (Student s : students) System.out.println("s.name = " + s.getName());
 
             tx.commit();
         } catch (Exception e) {
