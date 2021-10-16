@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class JpaMain {
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -55,14 +54,17 @@ public class JpaMain {
             em.persist(r2);
 
 
+            String query = "update Student s set s.age = 0";
+            int updatedDataSize = em.createQuery(query).executeUpdate();
+//            System.out.println("student = " + student.getAge());
+
             em.flush();
             em.clear();
 
-            String query = "select s from Student s where s.club = :club";
-            List<Student> students = em.createQuery(query, Student.class)
-                    .setParameter("club", c1)
-                    .getResultList();
-            for (Student s : students) System.out.println("s.name = " + s.getName());
+            Student findStudent = em.find(Student.class, student.getId());
+            System.out.println("findStudent = " + findStudent);
+            System.out.println("student = " + student);
+            System.out.println("updatedDataSize = " + updatedDataSize);
 
             tx.commit();
         } catch (Exception e) {
