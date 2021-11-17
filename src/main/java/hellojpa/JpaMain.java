@@ -45,13 +45,13 @@ public class JpaMain {
 
             // codeMania 학생 한국사 과목 수강
             StudentSubject studentSubject2 = new StudentSubject();
-            codeMania.addStudentSubject(new StudentSubject());
+            codeMania.addStudentSubject(studentSubject2);
             studentSubject2.takeSubject(history);
             em.persist(studentSubject2);
 
             // codeLover 학생 한국사 과목 수강
             StudentSubject studentSubject3 = new StudentSubject();
-            studentSubject3.setStudent(codeLover);
+            codeLover.addStudentSubject(studentSubject3);
             studentSubject3.takeSubject(history);
             em.persist(studentSubject3);
 
